@@ -72,7 +72,6 @@ class Model extends Observable {
         }
       }
     }
-    println("Average fitness immortal / moral: " + averageFitness)
   }
 
   def getChildPosition(x: Int, y: Int): (Int, Int) = {

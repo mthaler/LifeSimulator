@@ -33,12 +33,15 @@ class MainWindow extends JFrame {
   add(view, BorderLayout.CENTER)
 
   val box = new Box(BoxLayout.Y_AXIS)
+  box.setPreferredSize(new Dimension(300, 800))
   box.add(new ConfigPanel)
-  box.add(new ControlPanel(view))
+  val statusPanel = new StatusPanel
+  box.add(statusPanel)
+  box.add(new ControlPanel(view, statusPanel))
   box.add(Box.createVerticalStrut(Int.MaxValue))
   add(box, BorderLayout.EAST)
 
-  setPreferredSize(new Dimension(1000, 800))
+  setPreferredSize(new Dimension(1100, 800))
   setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
   pack()
 }
