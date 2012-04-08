@@ -53,6 +53,23 @@ class Model extends Observable {
         }
       }
     }
+    // decrease the fitness of all cells and remove the ones that have fitness smaller than zero
+    for(x <- 0 until Size) {
+      for( y <- 0 until Size) {
+        cells(x)(y) match {
+          case EmptyCell =>
+          case i: ImmortalCell => {
+            val newFitness = i.fitness - Config.FitnessDecrease
+            cells(x)(y) = if (newFitness > 0) i.copy(fitness = newFitness) else EmptyCell
+          }
+          case m: MortalCell => {
+            val newFitness = m.fitness - Config.FitnessDecrease
+            cells(x)(y) = if (newFitness > 0) m.copy(fitness = newFitness) else EmptyCell
+          }
+        }
+      }
+    }
+
     // create children for each child
     for(x <- 0 until Size) {
       for( y <- 0 until Size) {

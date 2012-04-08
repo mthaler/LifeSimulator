@@ -7,4 +7,5 @@ object Config {
   var InitalFitness = 1.0
   var MaxAge = 5
   var MutationFactor = 0.1
+  var FitnessDecrease = 0.01
 }
