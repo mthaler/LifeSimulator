@@ -1,19 +1,19 @@
 package lifesimulator
 
-import collection.mutable.ArrayBuffer
+import collection.mutable.{WeakHashMap, ArrayBuffer}
+
 
 trait Observable {
-  val observers = ArrayBuffer.empty[Observer]
-
+  val observers = new WeakHashMap[Observer, Any]
   def addObserver(observer: Observer) {
-    observers += observer
+    observers.put(observer, null)
   }
 
   def removeObserver(observer: Observer) {
-    observers -= observer
+    observers.remove(observer)
   }
 
   def notifyObservers() {
-    for (observer <- observers) observer.updated
+    for (observer <- observers.keys) observer.updated
   }
 }
