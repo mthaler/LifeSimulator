@@ -222,4 +222,81 @@ class Model extends Observable {
       averageFitnessOfMortalCells
     })
   }
+
+  private def calculateMinMax: (Double, Double, Double, Double, Double, Double) = {
+    var minimumFitness = Double.MaxValue
+    var maximumFitness = Double.MinValue
+    var minimumFitnessOfImmortalCells = Double.MaxValue
+    var maximumFitnessOfImmortalCells = Double.MinValue
+    var minimumFitnessOfMortalCells = Double.MaxValue
+    var maximumFitnessOfMortalCells = Double.MinValue
+    for (x <- 0 until Size) {
+      for(y <- 0 until Size) {
+        cells(x)(y) match {
+          case EmptyCell =>
+          case i: ImmortalCell => {
+            if (i.fitness < minimumFitness) minimumFitness = i.fitness
+            if (i.fitness > maximumFitness) maximumFitness = i.fitness
+            if (i.fitness < minimumFitnessOfImmortalCells) minimumFitnessOfImmortalCells = i.fitness
+            if (i.fitness > maximumFitnessOfImmortalCells) maximumFitnessOfImmortalCells = i.fitness
+          }
+          case m: MortalCell => {
+            if (m.fitness < minimumFitness) minimumFitness = m.fitness
+            if (m.fitness > maximumFitness) maximumFitness = m.fitness
+            if (m.fitness < minimumFitnessOfMortalCells) minimumFitnessOfMortalCells = m.fitness
+            if (m.fitness > maximumFitnessOfMortalCells) maximumFitnessOfMortalCells = m.fitness
+          }
+        }
+      }
+    }
+    (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+  }
+
+  def getMinimumFitness: Double = {
+    ModelCache.minimumFitness.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      minimumFitness
+    })
+  }
+
+  def getMaximumFitness: Double = {
+    ModelCache.maximumFitness.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      maximumFitness
+    })
+  }
+
+  def getMinimumFitnessOfImmortalCells: Double = {
+    ModelCache.minimumFitnessOfImmortalCells.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      minimumFitnessOfImmortalCells
+    })
+  }
+
+  def getMaximumFitnessOfImmortalCells: Double = {
+    ModelCache.maximumFitnessOfImmortalCells.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      maximumFitnessOfImmortalCells
+    })
+  }
+
+  def getMinimumFitnessOfMortalCells: Double = {
+    ModelCache.minimumFitnessOfMortalCells.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      minimumFitnessOfMortalCells
+    })
+  }
+
+  def getMaximumFitnessOfMortalCells: Double = {
+    ModelCache.maximumFitnessOfMortalCells.getOrElse({
+      val (minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells) = calculateMinMax
+      ModelCache.setMinMax(minimumFitness, maximumFitness, minimumFitnessOfImmortalCells, maximumFitnessOfImmortalCells, minimumFitnessOfMortalCells, maximumFitnessOfMortalCells)
+      maximumFitnessOfMortalCells
+    })
+  }
 }

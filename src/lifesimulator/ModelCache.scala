@@ -7,6 +7,12 @@ object ModelCache extends Observer {
   var averageFitness: Option[Double] = None
   var averageFitnessOfImmortalCells: Option[Double] = None
   var averageFitnessOfMortalCells: Option[Double] = None
+  var minimumFitness: Option[Double] = None
+  var maximumFitness: Option[Double] = None
+  var minimumFitnessOfImmortalCells: Option[Double] = None
+  var maximumFitnessOfImmortalCells: Option[Double] = None
+  var minimumFitnessOfMortalCells: Option[Double] = None
+  var maximumFitnessOfMortalCells: Option[Double] = None
 
   private var _model: Option[Model] = None
 
@@ -25,6 +31,12 @@ object ModelCache extends Observer {
     averageFitness = None
     averageFitnessOfImmortalCells = None
     averageFitnessOfMortalCells = None
+    minimumFitness = None
+    maximumFitness = None
+    minimumFitnessOfImmortalCells = None
+    maximumFitnessOfImmortalCells = None
+    minimumFitnessOfMortalCells = None
+    maximumFitnessOfMortalCells = None
   }
 
   def setNumberOfCells(numberOfNonEmptyCells: Int, numberOfImmortalCells: Int, numberOfMortalCells: Int) {
@@ -37,6 +49,15 @@ object ModelCache extends Observer {
     this.averageFitness = Some(averageFitness)
     this.averageFitnessOfImmortalCells = Some(averageFitnessOfImmortalCells)
     this.averageFitnessOfMortalCells = Some(averageFitnessOfMortalCells)
+  }
+
+  def setMinMax(minimumFitness: Double, maximumFitness: Double, minimumFitnessOfImmortalCells: Double, maximumFitnessOfImmortalCells: Double, minimumFitnessOfMortalCells: Double, maximumFitnessOfMortalCells: Double) {
+    this.minimumFitness = Some(minimumFitness)
+    this.maximumFitness = Some(maximumFitness)
+    this.minimumFitnessOfImmortalCells = Some(minimumFitnessOfImmortalCells)
+    this.maximumFitnessOfImmortalCells = Some(maximumFitnessOfImmortalCells)
+    this.minimumFitnessOfMortalCells = Some(minimumFitnessOfMortalCells)
+    this.maximumFitnessOfMortalCells = Some(maximumFitnessOfMortalCells)
   }
 
   def updated() {

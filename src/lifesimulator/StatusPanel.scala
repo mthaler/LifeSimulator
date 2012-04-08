@@ -47,6 +47,53 @@ class StatusPanel extends Box(BoxLayout.Y_AXIS) with Observer {
   boxAverageFitnessOfMortalCells.add(labelAverageFitnessOfMortalCells)
   boxAverageFitnessOfMortalCells.add(Box.createGlue())
 
+  val boxMinimumFitness = new Box(BoxLayout.X_AXIS)
+  add(boxMinimumFitness)
+
+  boxMinimumFitness.add(createLabel("Minimum fitness: "))
+  val labelMinimumFitness = new JLabel()
+  boxMinimumFitness.add(labelMinimumFitness)
+  boxMinimumFitness.add(Box.createGlue())
+
+  val boxMaximumFitness = new Box(BoxLayout.X_AXIS)
+  add(boxMaximumFitness)
+
+  boxMaximumFitness.add(createLabel("Maximum fitness: "))
+  val labelMaximumFitness = new JLabel()
+  boxMaximumFitness.add(labelMaximumFitness)
+  boxMaximumFitness.add(Box.createGlue())
+
+  val boxMinimumFitnessOfImmortalCells = new Box(BoxLayout.X_AXIS)
+  add(boxMinimumFitnessOfImmortalCells)
+
+  boxMinimumFitnessOfImmortalCells.add(createLabel("Minimum fitness immortal cells: "))
+  val labelMinimumFitnessOfImmortalCells = new JLabel()
+  boxMinimumFitnessOfImmortalCells.add(labelMinimumFitnessOfImmortalCells)
+  boxMinimumFitnessOfImmortalCells.add(Box.createGlue())
+
+  val boxMaximumFitnessOfImmortalCells = new Box(BoxLayout.X_AXIS)
+  add(boxMaximumFitnessOfImmortalCells)
+
+  boxMaximumFitnessOfImmortalCells.add(createLabel("Maximum fitness immortal cells: "))
+  val labelMaximumFitnessOfImmortalCells = new JLabel()
+  boxMaximumFitnessOfImmortalCells.add(labelMaximumFitnessOfImmortalCells)
+  boxMaximumFitnessOfImmortalCells.add(Box.createGlue())
+
+  val boxMinimumFitnessOfMortalCells = new Box(BoxLayout.X_AXIS)
+  add(boxMinimumFitnessOfMortalCells)
+
+  boxMinimumFitnessOfMortalCells.add(createLabel("Minimum fitness mortal cells: "))
+  val labelMinimumFitnessOfMortalCells = new JLabel()
+  boxMinimumFitnessOfMortalCells.add(labelMinimumFitnessOfMortalCells)
+  boxMinimumFitnessOfMortalCells.add(Box.createGlue())
+
+  val boxMaximumFitnessOfMortalCells = new Box(BoxLayout.X_AXIS)
+  add(boxMaximumFitnessOfMortalCells)
+
+  boxMaximumFitnessOfMortalCells.add(createLabel("Maximum fitness mortal cells: "))
+  val labelMaximumFitnessOfMortalCells = new JLabel()
+  boxMaximumFitnessOfMortalCells.add(labelMaximumFitnessOfMortalCells)
+  boxMaximumFitnessOfMortalCells.add(Box.createGlue())
 
   def updated() {
     _model match {
@@ -55,6 +102,12 @@ class StatusPanel extends Box(BoxLayout.Y_AXIS) with Observer {
         labelNumberOfMortalCells.setText(m.getNumberOfMortalCells.toString)
         labelAverageFitnessOfImmortalCells.setText(m.getAverageFitnessOfImmortalCells.toString)
         labelAverageFitnessOfMortalCells.setText(m.getAverageFitnessOfMortalCells.toString)
+        labelMinimumFitness.setText(m.getMinimumFitness.toString)
+        labelMaximumFitness.setText(m.getMaximumFitness.toString)
+        labelMinimumFitnessOfImmortalCells.setText(m.getMinimumFitnessOfImmortalCells.toString)
+        labelMaximumFitnessOfImmortalCells.setText(m.getMaximumFitnessOfImmortalCells.toString)
+        labelMinimumFitnessOfMortalCells.setText(m.getMinimumFitnessOfMortalCells.toString)
+        labelMaximumFitnessOfMortalCells.setText(m.getMaximumFitnessOfMortalCells.toString)
       }
       case None =>
     }
