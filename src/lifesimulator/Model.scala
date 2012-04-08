@@ -53,7 +53,7 @@ class Model extends Observable {
         }
       }
     }
-    // create children for each cell
+    // create children for each child
     for(x <- 0 until Size) {
       for( y <- 0 until Size) {
         val cell = cells(x)(y)
@@ -76,7 +76,7 @@ class Model extends Observable {
 
   def getChildPosition(x: Int, y: Int): (Int, Int) = {
     val index = Random.nextInt(9)
-    // place the new child cell next to the parent cell
+    // place the new child child next to the parent child
     val (newX, newY) = index match {
       case 0 => (x - 1, y - 1)
       case 1 => (x - 1, y)
@@ -94,13 +94,20 @@ class Model extends Observable {
     (resultX, resultY)
   }
 
-  def setChild(cell: Cell, x: Int, y: Int) {
-    // get the cell at his position
+  def setChild(child: Cell, x: Int, y: Int) {
+    // get the child at his position
     val oldCell = cells(x)(y)
     oldCell match {
-      case EmptyCell => cells(x)(y) = cell
+      case EmptyCell => cells(x)(y) = child
       case c => {
-        cells(x)(y) = c
+        if (c.fitness + child.fitness > 0.0) {
+          val oldCellFitnessNormalized = c.fitness / (c.fitness + child.fitness)
+          val childCellFitnessNormalized = child.fitness / (c.fitness + child.fitness)
+          val r = Random.nextDouble()
+          cells(x)(y) = if (r <= oldCellFitnessNormalized) c else child
+        } else {
+          cells(x)(y) = if (r <= 0.5) c else child
+        }
       }
     }
 

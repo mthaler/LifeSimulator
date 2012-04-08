@@ -1,6 +1,8 @@
 package lifesimulator
 
-trait Cell
+trait Cell {
+  def fitness: Double
+}
 
 case class ImmortalCell(fitness: Double) extends Cell {
   def makeChild = {
@@ -14,4 +16,6 @@ case class MortalCell(fitness: Double, age: Int) extends Cell {
   }
 }
 
-case object EmptyCell extends Cell
+case object EmptyCell extends Cell {
+  val fitness = 1.0
+}
