@@ -51,12 +51,10 @@ class StatusPanel extends Box(BoxLayout.Y_AXIS) with Observer {
   def updated() {
     _model match {
       case Some(m) => {
-        val (numberOfImmortalCells, numberOfMortalCells) = m.numberOfCells
-        labelNumberOfImmortalCells.setText(numberOfImmortalCells.toString)
-        labelNumberOfMortalCells.setText(numberOfMortalCells.toString)
-        val (averageFitnessOfImmortalCells, averageFitnessOfMortalCells) = m.averageFitness
-        labelAverageFitnessOfImmortalCells.setText(averageFitnessOfImmortalCells.toString)
-        labelAverageFitnessOfMortalCells.setText(averageFitnessOfMortalCells.toString)
+        labelNumberOfImmortalCells.setText(m.getNumerOfImmortalCells.toString)
+        labelNumberOfMortalCells.setText(m.getNumberOfMortalCells.toString)
+        labelAverageFitnessOfImmortalCells.setText(m.getAverageFitnessOfImmortalCells.toString)
+        labelAverageFitnessOfMortalCells.setText(m.getAverageFitnessOfMortalCells.toString)
       }
       case None =>
     }

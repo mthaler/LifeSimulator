@@ -8,4 +8,5 @@ object Config {
   var MaxAge = 5
   var MutationFactor = 0.1
   var FitnessDecrease = 0.01
+  var BirthDistance = 1.0
 }

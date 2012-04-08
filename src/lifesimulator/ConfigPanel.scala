@@ -6,7 +6,7 @@ import java.awt.{Dimension, GridLayout}
 
 class ConfigPanel extends JPanel {
 
-  setLayout(new GridLayout(5, 2))
+  setLayout(new GridLayout(6, 2))
 
   add(createLabel("Size:"))
   add(createTextField(Config.Size.toString, (text: String) => Config.Size = text.toInt))
@@ -23,6 +23,8 @@ class ConfigPanel extends JPanel {
   add(createLabel("Fitness Decrease:"))
   add(createTextField(Config.FitnessDecrease.toString, (text: String) => Config.FitnessDecrease = text.toDouble))
 
+  add(createLabel("Birth Distance:"))
+  add(createTextField(Config.BirthDistance.toString, (text: String) => Config.BirthDistance = text.toDouble))
 
   setPreferredSize(new Dimension(200, 0))
 }

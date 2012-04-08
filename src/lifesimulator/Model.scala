@@ -8,6 +8,8 @@ class Model extends Observable {
 
   import Config._
 
+  ModelCache.model = this
+
   val cells = Array.ofDim[Cell](Size,Size)
   initCells()
 
@@ -94,16 +96,17 @@ class Model extends Observable {
   def getChildPosition(x: Int, y: Int): (Int, Int) = {
     val index = Random.nextInt(9)
     // place the new child child next to the parent child
+    val birthDistance = BirthDistance.toInt
     val (newX, newY) = index match {
-      case 0 => (x - 1, y - 1)
-      case 1 => (x - 1, y)
-      case 2 => (x - 1, y + 1)
-      case 3 => (x, y - 1)
+      case 0 => (x - birthDistance, y - birthDistance)
+      case 1 => (x - birthDistance, y)
+      case 2 => (x - birthDistance, y + birthDistance)
+      case 3 => (x, y - birthDistance)
       case 4 => (x, y)
-      case 5 => (x, y + 1)
-      case 6 => (x + 1, y - 1)
-      case 7 => (x + 1, y)
-      case 8 => (x + 1, y + 1)
+      case 5 => (x, y + birthDistance)
+      case 6 => (x + birthDistance, y - birthDistance)
+      case 7 => (x + birthDistance, y)
+      case 8 => (x + birthDistance, y + birthDistance)
     }
     // periodic boundary conditions
     val resultX = if(newX < 0) newX + Size else if (newX >= Size) newX - Size else newX
@@ -137,7 +140,7 @@ class Model extends Observable {
 
   def apply(x: Int, y: Int): Cell = cells(x % Size)(y % Size)
 
-  def numberOfCells: (Int, Int) = {
+  private def calculateNumberOfCells: (Int, Int, Int) = {
     var numberOfImmortalCells = 0
     var numberOfMortalCells = 0
     for (x <- 0 until Size) {
@@ -149,31 +152,74 @@ class Model extends Observable {
         }
       }
     }
-    (numberOfImmortalCells, numberOfMortalCells)
+    (numberOfImmortalCells + numberOfMortalCells, numberOfImmortalCells, numberOfMortalCells)
   }
 
-  def averageFitness: (Double, Double) = {
-    var numberOfImmortalCells = 0
-    var numberOfMortalCells = 0
+  private def calculateAverageFitnesses: (Double, Double, Double) = {
+    val numberOfImmortalCells = getNumerOfImmortalCells
+    val numberOfMortalCells = getNumberOfMortalCells
     var fitnessImmortalCells = 0.0
     var fitnessMortalCells = 0.0
     for (x <- 0 until Size) {
       for( y <- 0 until Size) {
         cells(x)(y) match {
-          case i: ImmortalCell => {
-            numberOfImmortalCells += 1
-            fitnessImmortalCells += i.fitness
-          }
-          case m: MortalCell => {
-            numberOfMortalCells += 1
-            fitnessMortalCells += m.fitness
-          }
+          case i: ImmortalCell => fitnessImmortalCells += i.fitness
+          case m: MortalCell => fitnessMortalCells += m.fitness
           case _ =>
         }
       }
     }
+    val averageFitness = if (numberOfImmortalCells + numberOfMortalCells > 0) (fitnessImmortalCells + fitnessMortalCells) / (numberOfImmortalCells + numberOfMortalCells) else 0
     val averageFitnessImmortalCells = if (numberOfImmortalCells > 0) fitnessImmortalCells / numberOfImmortalCells else 0
     val averageFitnessMortalCells = if (numberOfMortalCells > 0) fitnessMortalCells / numberOfMortalCells else 0
-    (averageFitnessImmortalCells, averageFitnessMortalCells)
+    (averageFitness, averageFitnessImmortalCells, averageFitnessMortalCells)
+  }
+
+  def getNumerOfImmortalCells: Int = {
+    ModelCache.numberOfImmortalCells.getOrElse({
+      val (numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells) = calculateNumberOfCells
+      ModelCache.setNumberOfCells(numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells)
+      numberOfImmortalCells
+    })
+  }
+
+  def getNumberOfMortalCells: Int = {
+    ModelCache.numberOfMortalCells.getOrElse({
+      val (numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells) = calculateNumberOfCells
+      ModelCache.setNumberOfCells(numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells)
+      numberOfMortalCells
+    })
+  }
+
+  def getNumberOfNonEmptyCells: Int = {
+    ModelCache.numberOfNonEmptyCells.getOrElse({
+      val (numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells) = calculateNumberOfCells
+      ModelCache.setNumberOfCells(numberOfNonEmptyCells, numberOfImmortalCells, numberOfMortalCells)
+      numberOfNonEmptyCells
+    })
+  }
+
+  def getAverageFitness: Double = {
+    ModelCache.averageFitness.getOrElse({
+      val (averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells) = calculateAverageFitnesses
+      ModelCache.setAverageFitness(averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells)
+      averageFitness
+    })
+  }
+
+  def getAverageFitnessOfImmortalCells: Double = {
+    ModelCache.averageFitnessOfImmortalCells.getOrElse({
+      val (averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells) = calculateAverageFitnesses
+      ModelCache.setAverageFitness(averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells)
+      averageFitnessOfImmortalCells
+    })
+  }
+
+  def getAverageFitnessOfMortalCells: Double = {
+    ModelCache.averageFitnessOfMortalCells.getOrElse({
+      val (averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells) = calculateAverageFitnesses
+      ModelCache.setAverageFitness(averageFitness, averageFitnessOfImmortalCells, averageFitnessOfMortalCells)
+      averageFitnessOfMortalCells
+    })
   }
 }
