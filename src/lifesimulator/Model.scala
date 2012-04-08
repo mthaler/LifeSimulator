@@ -72,6 +72,7 @@ class Model extends Observable {
         }
       }
     }
+    println("Average fitness immortal / moral: " + averageFitness)
   }
 
   def getChildPosition(x: Int, y: Int): (Int, Int) = {
@@ -95,23 +96,68 @@ class Model extends Observable {
   }
 
   def setChild(child: Cell, x: Int, y: Int) {
-    // get the child at his position
-    val oldCell = cells(x)(y)
-    oldCell match {
-      case EmptyCell => cells(x)(y) = child
-      case c => {
-        if (c.fitness + child.fitness > 0.0) {
-          val oldCellFitnessNormalized = c.fitness / (c.fitness + child.fitness)
-          val childCellFitnessNormalized = child.fitness / (c.fitness + child.fitness)
-          val r = Random.nextDouble()
-          cells(x)(y) = if (r <= oldCellFitnessNormalized) c else child
-        } else {
-          cells(x)(y) = if (r <= 0.5) c else child
+    child match {
+      case EmptyCell =>
+      case _ => {
+        // get the child at his position
+        val oldCell = cells(x)(y)
+        oldCell match {
+          case EmptyCell => cells(x)(y) = child
+          case c => {
+            if (c.fitness + child.fitness > 0.0) {
+              val oldCellFitnessNormalized = c.fitness / (c.fitness + child.fitness)
+              val childCellFitnessNormalized = child.fitness / (c.fitness + child.fitness)
+              val r = Random.nextDouble()
+              cells(x)(y) = if (r <= oldCellFitnessNormalized) c else child
+            } else {
+              val r = Random.nextDouble()
+              cells(x)(y) = if (r <= 0.5) c else child
+            }
+          }
         }
       }
     }
-
   }
 
   def apply(x: Int, y: Int): Cell = cells(x % Size)(y % Size)
+
+  def numberOfCells: (Int, Int) = {
+    var numberOfImmortalCells = 0
+    var numberOfMortalCells = 0
+    for (x <- 0 until Size) {
+      for( y <- 0 until Size) {
+        cells(x)(y) match {
+          case i: ImmortalCell => numberOfImmortalCells += 1
+          case m: MortalCell => numberOfMortalCells += 1
+          case _ =>
+        }
+      }
+    }
+    (numberOfImmortalCells, numberOfMortalCells)
+  }
+
+  def averageFitness: (Double, Double) = {
+    var numberOfImmortalCells = 0
+    var numberOfMortalCells = 0
+    var fitnessImmortalCells = 0.0
+    var fitnessMortalCells = 0.0
+    for (x <- 0 until Size) {
+      for( y <- 0 until Size) {
+        cells(x)(y) match {
+          case i: ImmortalCell => {
+            numberOfImmortalCells += 1
+            fitnessImmortalCells += i.fitness
+          }
+          case m: MortalCell => {
+            numberOfMortalCells += 1
+            fitnessMortalCells += m.fitness
+          }
+          case _ =>
+        }
+      }
+    }
+    val averageFitnessImmortalCells = if (numberOfImmortalCells > 0) fitnessImmortalCells / numberOfImmortalCells else 0
+    val averageFitnessMortalCells = if (numberOfMortalCells > 0) fitnessMortalCells / numberOfMortalCells else 0
+    (averageFitnessImmortalCells, averageFitnessMortalCells)
+  }
 }
